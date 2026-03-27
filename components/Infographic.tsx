@@ -67,9 +67,11 @@ export default function Infographic({ data }: InfographicProps) {
               ))}
             </Pie>
             <Tooltip
-              formatter={(value: number, name: string) => {
-                const key = name as WasteDatum["type"];
-                return [`${value}%`, LABELS[key]];
+              formatter={(value, name) => {
+                const numericValue =
+                  typeof value === "number" ? value : Number(value);
+                const key = String(name) as WasteDatum["type"];
+                return [`${numericValue}%`, LABELS[key]];
               }}
             />
             <Legend

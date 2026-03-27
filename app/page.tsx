@@ -1,6 +1,7 @@
 import { csvParse } from "d3";
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { Suspense } from "react";
 
 import VisualizationTabs from "@/components/VisualizationTabs";
 
@@ -119,11 +120,19 @@ export default async function Home() {
           </p>
         </header>
 
-        <VisualizationTabs
-          wasteData={wasteData}
-          reservoirData={reservoirData}
-          temperatureData={temperatureData}
-        />
+        <Suspense
+          fallback={
+            <div className="dashboard-card text-sm text-slate-600">
+              Cargando visualizacion...
+            </div>
+          }
+        >
+          <VisualizationTabs
+            wasteData={wasteData}
+            reservoirData={reservoirData}
+            temperatureData={temperatureData}
+          />
+        </Suspense>
       </section>
     </main>
   );
