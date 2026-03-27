@@ -6,7 +6,7 @@ import { Suspense } from "react";
 import VisualizationTabs from "@/components/VisualizationTabs";
 
 type WasteDatum = {
-  type: "recycling" | "landfill" | "incineration";
+  type: "recycling" | "landfill" | "landfill_operations" | "incineration";
   value: number;
 };
 
@@ -106,24 +106,29 @@ export default async function Home() {
   return (
     <main className="min-h-screen px-4 py-8 sm:px-8 lg:px-12">
       <section className="mx-auto w-full max-w-7xl">
-        <header className="mb-8 rounded-3xl border border-white/60 bg-white/70 p-6 shadow-lg backdrop-blur md:p-8">
-          <p className="mb-2 inline-flex rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white">
-            Dashboard
-          </p>
-          <h1 className="text-2xl font-bold text-slate-900 md:text-4xl">
-            Visualizacion de Datos Ambientales
-          </h1>
-          <p className="mt-3 max-w-3xl text-sm text-slate-600 md:text-base">
-            Panel unico con tres tecnicas de visualizacion: infografia de
-            residuos, gauge de embalses y spiral plot de temperatura media en
-            Barcelona.
-          </p>
+        <header className="dashboard-card mb-6">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-blue-700">
+                UOC · Visualización de Datos
+              </p>
+              <h1 className="mt-1 text-2xl font-bold text-slate-900 sm:text-3xl">
+                PEC2 - Técnicas de Visualización
+              </h1>
+              <p className="mt-2 max-w-3xl text-sm text-slate-600">
+                Trabajo práctico de la asignatura de Visualización de Datos de la UOC.
+              </p>
+            </div>
+            <div className="rounded-lg bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700">
+              Lluís Mendoza Vandrell
+            </div>
+          </div>
         </header>
 
         <Suspense
           fallback={
             <div className="dashboard-card text-sm text-slate-600">
-              Cargando visualizacion...
+              Cargando visualización...
             </div>
           }
         >

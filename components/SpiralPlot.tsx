@@ -6,6 +6,7 @@ import { select } from "d3-selection";
 import { curveCardinal, radialLine } from "d3-shape";
 import { timeFormat } from "d3-time-format";
 import { useEffect, useMemo, useRef } from "react";
+import { BarChart3 } from "lucide-react";
 
 type TemperatureDatum = {
   date: string;
@@ -52,6 +53,18 @@ export default function SpiralPlot({ data }: SpiralPlotProps) {
   const temperatures = sortedData.map((d) => d.temperature);
   const minTemp = temperatures.length > 0 ? Math.min(...temperatures) : 0;
   const maxTemp = temperatures.length > 0 ? Math.max(...temperatures) : 0;
+
+  // Calcular años
+  const yearRange = useMemo(() => {
+    if (sortedData.length === 0) return { start: "", end: "", count: 0 };
+    const first = new Date(sortedData[0].date);
+    const last = new Date(sortedData[sortedData.length - 1].date);
+    return {
+      start: first.getFullYear().toString(),
+      end: last.getFullYear().toString(),
+      count: last.getFullYear() - first.getFullYear() + 1
+    };
+  }, [sortedData]);
 
   useEffect(() => {
     if (!chartRef.current || someData.length === 0) {
@@ -150,7 +163,7 @@ export default function SpiralPlot({ data }: SpiralPlotProps) {
       .style("stroke", "none")
       .attr("transform", (d) => `rotate(${d.a}, ${d.x}, ${d.y})`)
       .append("title")
-      .text((d) => `${tooltipDateFormatter.format(d.date)}: ${d.value.toFixed(1)} C`);
+      .text((d) => `${tooltipDateFormatter.format(d.date)}: ${d.value.toFixed(1)} °C`);
 
     const tF = timeFormat("%Y");
     const firstInYear: Record<string, number> = {};
@@ -184,31 +197,83 @@ export default function SpiralPlot({ data }: SpiralPlotProps) {
 
   return (
     <section className="dashboard-card card-enter card-enter-delay-2">
-      <header className="mb-4 flex items-start justify-between gap-3">
-        <div>
-          <h2 className="text-xl font-semibold text-slate-900">
-            Temperatura media en Barcelona
-          </h2>
-          <p className="mt-1 text-sm text-slate-600">
-            Estilo timeline en espiral con barras orientadas sobre la curva.
-          </p>
+      {/* Header Profesional */}
+      <header className="mb-6 border-b border-slate-200 pb-4">
+        <div className="mb-3 flex items-center justify-between">
+          <div>
+            <div className="mb-2 flex items-center gap-2">
+              <h2 className="text-2xl font-bold text-slate-900">
+                Ciclos de Temperatura en Barcelona
+              </h2>
+              <span className="rounded-lg bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700">
+                {yearRange.start}-{yearRange.end}
+              </span>
+            </div>
+            <p className="text-sm text-slate-600">
+              Series temporales de {yearRange.count} años analizadas mediante patrón espiral
+            </p>
+          </div>
+          <span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-medium text-sky-700">
+            Spiral Plot
+          </span>
         </div>
-        <span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-medium text-sky-700">
-          Spiral Plot
-        </span>
       </header>
 
-      <div className="w-full overflow-x-auto">
-        <div ref={chartRef} className="mx-auto w-full min-w-[320px] max-w-[560px]" />
+      {/* Main Chart */}
+      <div className="mb-6 flex w-full justify-center">
+        <div className="w-full overflow-x-auto">
+          <div ref={chartRef} className="mx-auto w-full min-w-[320px] max-w-[560px]" />
+        </div>
       </div>
 
-      <div className="mt-4 rounded-xl bg-slate-50 p-3 text-sm text-slate-700">
-        <p className="mb-2 font-medium text-slate-800">Leyenda</p>
-        <div className="mb-2 h-3 w-full rounded-full bg-gradient-to-r from-blue-400 to-red-600" />
+      {/* Legend */}
+      <div className="mb-6 rounded-lg bg-slate-50 p-4">
+        <p className="mb-3 text-sm font-semibold text-slate-800">Escala de Color</p>
+        <div className="mb-3 h-3 w-full rounded-full bg-gradient-to-r from-blue-400 to-red-600" />
         <div className="flex items-center justify-between text-xs text-slate-600">
-          <span>{minTemp.toFixed(1)} C (más frío)</span>
-          <span>{maxTemp.toFixed(1)} C (más cálido)</span>
+          <span className="flex items-center gap-1">
+            <span className="inline-block h-2 w-2 rounded-full bg-blue-400"></span>
+            {minTemp.toFixed(1)}°C (más frío)
+          </span>
+          <span className="flex items-center gap-1">
+            {maxTemp.toFixed(1)}°C (más cálido)
+            <span className="inline-block h-2 w-2 rounded-full bg-red-600"></span>
+          </span>
         </div>
+      </div>
+
+      {/* Key Insights */}
+      <div className="mb-6 space-y-3">
+        <div className="rounded-lg bg-blue-50 p-4 text-sm text-blue-900">
+          <p className="font-semibold flex items-center gap-2"><BarChart3 className="h-5 w-5" /> Análisis Temporal:</p>
+          <p>
+              La visualización despliega <strong>{yearRange.count} años</strong> de datos mensuales
+              en una espiral, permitiendo identificar ciclos estacionales anuales
+              y anomalías a largo plazo simultáneamente.
+            </p>
+        </div>
+      </div>
+
+      {/* Professional Attribution */}
+      <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+        <p className="mb-2 text-xs font-semibold uppercase text-slate-600">
+          Fuente de Datos
+        </p>
+        <p className="text-sm text-slate-700">
+          Ajuntament de Barcelona - Opendata BCN -{" "}
+          <a
+            href="https://opendata-ajuntament.barcelona.cat/data/es/dataset/temperatures-hist-bcn/resource/0e3b6840-7dff-4731-a556-44fac28a7873"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-blue-600 hover:underline"
+          >
+            Temperatures Histórica Barcelona
+          </a>
+        </p>
+        <p className="mt-1 text-xs text-slate-500">
+          Nota: Datos de temperatura media mensual en Barcelona desde {yearRange.start} hasta {yearRange.end}.
+          Los datos provienen del portal de datos abiertos del Ajuntament de Barcelona.
+        </p>
       </div>
     </section>
   );

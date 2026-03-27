@@ -14,9 +14,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Dashboard de Visualizacion de Datos",
-  description:
-    "Dashboard en Next.js 14 con infografia, gauge y spiral plot para residuos, embalses y temperatura.",
+  title: "UOC Visualización - PEC2",
 };
 
 export default function RootLayout({

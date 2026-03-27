@@ -8,7 +8,7 @@ import Infographic from "@/components/Infographic";
 import SpiralPlot from "@/components/SpiralPlot";
 
 type WasteDatum = {
-  type: "recycling" | "landfill" | "incineration";
+  type: "recycling" | "landfill" | "landfill_operations" | "incineration";
   value: number;
 };
 
