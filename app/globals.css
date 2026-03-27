@@ -3,21 +3,56 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #f3f7fb;
+  --foreground: #0f172a;
 }
 
 body {
   color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(circle at 8% 12%, #dff4ea 0%, transparent 35%),
+    radial-gradient(circle at 92% 4%, #d9ebff 0%, transparent 38%),
+    linear-gradient(180deg, #f7fbff 0%, var(--background) 65%, #ecf4ff 100%);
+  font-family: var(--font-geist-sans), "Segoe UI", sans-serif;
+}
+
+.dashboard-card {
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 1.25rem;
+  padding: 1.2rem;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.95), #f8fbff);
+  box-shadow:
+    0 14px 32px rgba(15, 23, 42, 0.08),
+    0 4px 12px rgba(30, 64, 175, 0.05);
+}
+
+@media (min-width: 768px) {
+  .dashboard-card {
+    padding: 1.4rem;
+  }
+}
+
+.card-enter {
+  animation: card-rise 0.6s ease-out both;
+}
+
+.card-enter-delay-1 {
+  animation-delay: 0.15s;
+}
+
+.card-enter-delay-2 {
+  animation-delay: 0.3s;
+}
+
+@keyframes card-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @layer utilities {
